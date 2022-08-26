@@ -140,5 +140,5 @@ ORDER BY casting_types.id;
 -- récupération des genres d'un film dont l'id est 8
 SELECT movies.id, movies.title, movies_genres.genre_id as movie_genre_id, genres.name FROM movies
     INNER JOIN movies_genres ON movies_genres.movie_id = movies.id
-    INNER JOIN genres ON genres.id = movies_genres.id
+    INNER JOIN genres ON genres.id = movies_genres.genre_id
 WHERE movies.id = 8;

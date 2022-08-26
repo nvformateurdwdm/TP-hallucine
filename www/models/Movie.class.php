@@ -11,6 +11,7 @@ class Movie{
     private DateTime $_addedDate;
 
     private int $_rate = -1;
+    private array $_genres = array();
 
     public function __construct($id, $title, $imageURL, $runtime, $description, $releaseDate, $addedDate){
         $this->_id = $id;
@@ -32,8 +33,29 @@ class Movie{
     public function getReleaseDate(){return $this->_releaseDate;}
     public function getAddedDate(){return $this->_addedDate;}
 
+    public function getformatedRuntime():string {
+        $formatedRuntime = gmdate("H:i", $this->_runtime);
+        $formatedRuntimeArray = explode(":",$formatedRuntime);
+        if ($formatedRuntimeArray[0][0] == "0") {
+            $formatedRuntimeArray[0] = substr($formatedRuntimeArray[0],1);
+        }
+
+        if ($formatedRuntimeArray[1][0] == "0" && $formatedRuntimeArray[1][0] != "0") {
+            $formatedRuntimeArray[1] = substr($formatedRuntimeArray[1],1);
+        }
+
+        $formatedRuntime = $formatedRuntimeArray[0] . " h " . $formatedRuntimeArray[1] . " min";
+        return $formatedRuntime;
+    }
+
     public function getRate(){return $this->_rate;}
     public function setRate(int $rate){$this->_rate = $rate;}
+
+    public function setGenres(array $genres){
+        $this->_genres = $genres;
+    }
+
+    public function getGenres():array{return $this->_genres;}
     
 }
 
