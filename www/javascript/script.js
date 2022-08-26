@@ -59,8 +59,13 @@ class ProgressBar extends AbstractUIComponent{
     }
 
     start(){
+        const progressBarDiv = this.UIView.querySelector("#progressBar");
+        progressBarDiv.setAttribute("style", "width:" + 0);
         if(super.value != -1){
-            this.intervalID = setInterval(this.boundProgress, 25);
+            this.intervalID = setInterval(this.boundProgress, 5);
+        }else{
+            progressBarDiv.setAttribute("style", "width:" + 100 + "%");
+            progressBarDiv.style.backgroundColor = this.disableColor;
         }
     }
 
@@ -70,11 +75,11 @@ class ProgressBar extends AbstractUIComponent{
     }
 
     progress(){
-        // console.log(this);
-        
         const limit = 1000;
         const percent = Math.round(this.timer / limit * 100);
-        this.timer += 50;
+        console.log(percent);
+        
+        this.timer += 5;
         const progressBarDiv = this.UIView.querySelector("#progressBar");
         progressBarDiv.setAttribute("style", "width:" + percent.toString() + "%");
         if(percent >= super.value){

@@ -127,3 +127,18 @@ FROM movies_users_ratings
     RIGHT JOIN movies
     ON movies_users_ratings.movie_id = movies.id
 GROUP BY movies.id;
+
+-- récupération de tout le castings d'un film dont l'id est 3, ordonné par type de casting
+SELECT castings.*, casting_types.name
+FROM castings
+    INNER JOIN movies_castings ON movies_castings.casting_id = castings.id  
+    INNER JOIN movies ON movies_castings.movie_id = movies.id
+    INNER JOIN casting_types ON castings.type = casting_types.id
+WHERE movies.id = 3
+ORDER BY casting_types.id;
+
+-- récupération des genres d'un film dont l'id est 8
+SELECT movies.id, movies.title, movies_genres.genre_id as movie_genre_id, genres.name FROM movies
+    INNER JOIN movies_genres ON movies_genres.movie_id = movies.id
+    INNER JOIN genres ON genres.id = movies_genres.id
+WHERE movies.id = 8;
