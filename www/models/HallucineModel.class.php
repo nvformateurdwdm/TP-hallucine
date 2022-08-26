@@ -3,6 +3,7 @@
 require_once "Model.class.php";
 require_once "User.class.php";
 require_once "Movie.class.php";
+require_once "Genre.class.php";
 require_once "MovieUserRating.class.php";
 
 class HallucineModel extends Model{
@@ -102,6 +103,18 @@ class HallucineModel extends Model{
         if($value['average_rate'] != ""){
             $movie->setRate($value['average_rate']);
         }
+
+        $sql = "SELECT movies.id, movies.title, movies_genres.genre_id as movie_genre_id, genres.name FROM movies
+                    INNER JOIN movies_genres ON movies_genres.movie_id = movies.id
+                    INNER JOIN genres ON genres.id = movies_genres.genre_id
+                WHERE movies.id = $movieId;";
+        $rows = $this->_getRows(HOST, DB_NAME, LOGIN, PASSWORD, $sql);
+        $genres = array();
+        foreach ($rows as $key => $value) {
+            $genre = new Genre($value["movie_genre_id"], $value["name"]);
+            $genres[] = $genre;
+        }
+        $movie->setGenres($genres);
 
         $this->_movie = $movie;
     }

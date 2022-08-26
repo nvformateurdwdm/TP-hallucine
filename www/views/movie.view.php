@@ -13,6 +13,17 @@ if (isset($user)) {
     }
 }
 
+$sGenres = "";
+$count = count($movie->getGenres());
+foreach ($movie->getGenres() as $key => $value) {
+    $sGenre = "<a href='index.php?page=genre&genreid=".$value->getId()."'>".$value->getName()."</a>";
+    // $sGenre = $value->getName();
+    $sGenres .= $sGenre;
+    if($key < $count - 1){
+        $sGenres .= ", ";
+    }
+}
+
 ?>
 
 <section id="movie_section">
@@ -34,7 +45,7 @@ if (isset($user)) {
             <div id="rating" data-attr="<?= $movie->getRate() ?>">
                 <div id="progressBar"></div>
             </div>
-            <h4>Genre : Horreur, Aventure</h4>
+            <h4>Genre : <?= $sGenres ?></h4>
             <h4>Durée : <?= $movie->getformatedRuntime(); ?></h4>
             <h4>Acteurs : Kad Merad, Marina Foïs, Kad Merad, Marina Foïs, Kad Merad, Marina Foïs, Kad Merad, Marina Foïs</h4>
             <h4>Scénariste : Kad Merad, Marina Foïs</h4>
