@@ -5,7 +5,8 @@ const EventNames = {
     MOUSE_OVER: "mouseover",
     MOUSE_OUT: "mouseout",
     INPUT: "input",
-    CHANGE: "change"
+    CHANGE: "change",
+    INIT: "init"
     // etc
 };
 // -------------- MODE DEBUG --------------------
@@ -35,7 +36,7 @@ class AbstractUIComponent extends EventTarget { // DIAG
     }
 
     set value(value){
-        console.log("toto");
+        // console.log("toto");
         
         this.valueComponent = value;
     }

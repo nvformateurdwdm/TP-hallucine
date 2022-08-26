@@ -133,14 +133,19 @@ nav{
 
 #rating {
     width: 180px;
-    height: 5px;
+    height: 15px;
     background-color: black;
+}
+
+#movie h4 {
+    margin-top: 15px;
 }
 
 #progressBar {
     width: 50%;
-    height: 5px;
+    height: 15px;
     background-color: yellow;
+    margin-bottom: 15px;
 }
 
 

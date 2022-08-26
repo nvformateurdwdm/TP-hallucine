@@ -20,7 +20,7 @@ class HallucineController{
                     break;
                 case HallucineModel::LOGIN_OK:
                     $_SESSION['user'] = serialize($user);
-                    var_dump($_SESSION['user']);
+                    // var_dump($_SESSION['user']);
                     $this->showMovies();
                     break;
                 default:

@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hallucineController->showLogin();
             break;
         case 'movie':
-            echo "toto";
+            // echo "toto";
             $hallucineController->showMovie($params['movieid']);
             break;
         default:

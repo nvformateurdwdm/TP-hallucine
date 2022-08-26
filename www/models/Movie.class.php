@@ -10,7 +10,8 @@ class Movie{
     private DateTime $_releaseDate;
     private DateTime $_addedDate;
 
-    private int $_rate = 0;
+    private int $_rate = -1;
+    private array $_genre;
 
     public function __construct($id, $title, $imageURL, $runtime, $description, $releaseDate, $addedDate){
         $this->_id = $id;
@@ -25,15 +26,46 @@ class Movie{
     }
 
     public function getId(){return $this->_id;}
+
     public function getTitle(){return $this->_title;}
+
     public function getImageUrl(){return $this->_imageURL;}
-    public function getRuntime(){return $this->_runtime;}
+
+    public function getRuntime() { return $this->_runtime; }
+
     public function getDescription(){return $this->_description;}
+
     public function getReleaseDate(){return $this->_releaseDate;}
+
     public function getAddedDate(){return $this->_addedDate;}
 
     public function getRate(){return $this->_rate;}
+
     public function setRate(int $rate){$this->_rate = $rate;}
+    
+    public function getformatedRuntime():string {
+        $formatedRuntime = gmdate("H:i", $this->_runtime);
+        $formatedRuntimeArray = explode(":",$formatedRuntime);
+
+        if ($formatedRuntimeArray[0][0] == "0") {
+            $formatedRuntimeArray[0] = substr($formatedRuntimeArray[0],1);
+        }
+
+        if ($formatedRuntimeArray[1][0] == "0" && $formatedRuntimeArray[1][0] != "0") {
+            $formatedRuntimeArray[1] = substr($formatedRuntimeArray[1],1);
+        }
+
+        $formatedRuntime = $formatedRuntimeArray[0] . " h " . $formatedRuntimeArray[1] . " min";
+        return $formatedRuntime;
+    }
+
+    public function setGenres(array $genres) {
+        $this->_genres = $genres;
+    }
+
+    public function getGenres():array {
+        return $this->_genre;
+    }
     
 }
 

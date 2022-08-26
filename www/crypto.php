@@ -15,7 +15,7 @@ function connect($host, $dbname, $login, $password){
 }
 
 try{
-    $database = connect("localhost", "hallucine", "root", "Admin-01");
+    $database = connect("localhost", "hallucine", "root", "");
 }catch(Exception $error){
     echo "Erreur de connexion à la BDD.<br>";
     die("ERROR: ".$error->getMessage());
@@ -28,7 +28,7 @@ $rows = $request->fetchAll(PDO::FETCH_ASSOC);
 $request->closeCursor();
 
 foreach ($rows as $key => $value) {
-    $database = connect("localhost", "hallucine", "root", "Admin-01");
+    $database = connect("localhost", "hallucine", "root", "");
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     $sql = "UPDATE `users` SET `password` = '$hashedPassword'";
     $request = $database->prepare($sql);

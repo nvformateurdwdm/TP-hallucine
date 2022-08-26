@@ -24,6 +24,7 @@ include "head.php";
                         <option value="0" <?= isset($sort) && $sort == 0 ? "selected" : ""; ?> >Par titre</option>
                         <option value="1" <?= isset($sort) && $sort == 1 ? "selected" : ""; ?> >Par date de sortie</option>
                         <option value="2" <?= isset($sort) && $sort == 2 ? "selected" : ""; ?> >Par date d'ajout</option>
+                        <option value="3" <?= isset($sort) && $sort == 3 ? "selected" : ""; ?> >Par note décroissante</option>
                     </select>
                 </div>
                 

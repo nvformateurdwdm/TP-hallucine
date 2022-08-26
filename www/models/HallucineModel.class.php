@@ -5,7 +5,8 @@ require_once "User.class.php";
 require_once "Movie.class.php";
 require_once "MovieUserRating.class.php";
 
-class HallucineModel extends Model{
+class HallucineModel extends Model
+{
     private $_movies;
     private $_movie;
     private int $_loginStatus;
@@ -23,7 +24,8 @@ class HallucineModel extends Model{
     const MOVIE_USER_UPDATE_RATE = 1;
     const MOVIE_USER_DELETE_RATE = 2;
 
-    public function requestLogin(string $email, string $password){
+    public function requestLogin(string $email, string $password)
+    {
         $email = $this->_checkInput($email);
         $sql = "SELECT * FROM users WHERE email = '$email'";
         $rows = $this->_getRows(HOST, DB_NAME, LOGIN, PASSWORD, $sql);
@@ -44,18 +46,20 @@ class HallucineModel extends Model{
         }
     }
 
-    private function _checkInput($input){
+    private function _checkInput($input)
+    {
         $input = trim($input);
         $input = stripslashes($input);
         $input = htmlspecialchars($input);
-        if(IS_DEBUG){
+        if (IS_DEBUG) {
             // echo $input;
             // echo "<br>";
         }
         return $input;
     }
 
-    public function requestMovies($sort = self::SORT_MOVIES_BY_TITLE){
+    public function requestMovies($sort = self::SORT_MOVIES_BY_TITLE)
+    {
         $_movies = array();
 
         switch ($sort) {
@@ -69,14 +73,12 @@ class HallucineModel extends Model{
                 $sql = "SELECT * FROM `movies` ORDER BY added_date DESC;";
                 break;
             case self::SORT_MOVIES_BY_RATING:
-                $sql = "SELECT movies_users_ratings.movie_id, movies.title, AVG(movies_users_ratings.rate) as average_rate
+                $sql = "SELECT movies.*, AVG(movies_users_ratings.rate) as average_rate
                 FROM movies_users_ratings
-                    INNER JOIN movies
+                    RIGHT JOIN movies
                     ON movies_users_ratings.movie_id = movies.id
-                GROUP BY movies.id  
-                ORDER BY `average_rate` ASC";
-
-                $sql = "SELECT * FROM `movies` ORDER BY title;";
+                GROUP BY movies.id
+                ORDER BY average_rate DESC, movies.title;";
                 break;
             default:
                 $sql = "SELECT * FROM `movies`;";
@@ -91,22 +93,34 @@ class HallucineModel extends Model{
         }
     }
 
-    public function requestMovie(int $movieId){
-        $sql = "SELECT * FROM `movies` WHERE id = $movieId;";
+    public function requestMovie(int $movieId)
+    {
+        // $sql = "SELECT * FROM `movies` WHERE id = $movieId;";
+        $sql = "SELECT movies.*, AVG(movies_users_ratings.rate) as average_rate
+        FROM movies_users_ratings
+            INNER JOIN movies
+            ON movies_users_ratings.movie_id = movies.id
+            WHERE movies.id = $movieId";
         $rows = $this->_getRows(HOST, DB_NAME, LOGIN, PASSWORD, $sql);
         $value = $rows[0];
         $movie = new Movie($value["id"], $value["title"], $value["image_url"], $value["runtime"], $value["description"], $value["release_date"], $value["added_date"]);
         $this->_movie = $movie;
+
+        if($value['average_rate'] != "") {
+            $movie->setRate($value['average_rate']);
+        }
+
     }
 
-    public function requestMovieUserRating(int $userId, int $movieId): ?MovieUserRating{
+    public function requestMovieUserRating(int $userId, int $movieId): ?MovieUserRating
+    {
         $sql = "SELECT *  FROM `movies_users_ratings` WHERE `user_id` = $userId AND `movie_id` = $movieId;";
         $rows = $this->_getRows(HOST, DB_NAME, LOGIN, PASSWORD, $sql);
         if (count($rows) == 1) {
             $value = $rows[0];
             $movieUserRating = new MovieUserRating($value["id"], $value["user_id"], $value["movie_id"], $value["rate"]);
             return $movieUserRating;
-        } else if(count($rows) > 1){
+        } else if (count($rows) > 1) {
             echo "Plus d'un MovieUserRating trouvé...";
             return NULL;
         } else {
@@ -114,19 +128,28 @@ class HallucineModel extends Model{
         }
     }
 
-    public function setMovieUserRating(int $userId, int $movieId, int $rate){
+    public function setMovieUserRating(int $userId, int $movieId, int $rate)
+    {
         $sql = "INSERT INTO `movies_users_ratings` (`user_id`, `movie_id`, `rate`) VALUES ('$userId', '$movieId', '$rate')";
         $this->_getRows(HOST, DB_NAME, LOGIN, PASSWORD, $sql);
     }
 
-    public function updateMovieUserRating(int $movieUserRatingId, int $rate){
+    public function updateMovieUserRating(int $movieUserRatingId, int $rate)
+    {
         $sql = "UPDATE `movies_users_ratings` SET `rate` = '$rate' WHERE `movies_users_ratings`.`id` = $movieUserRatingId";
         $this->_getRows(HOST, DB_NAME, LOGIN, PASSWORD, $sql);
     }
 
-    public function getLoginStatus(){return $this->_loginStatus;}
-    public function getMovies(){return $this->_movies;}
-    public function getMovie(){return $this->_movie;}
-
+    public function getLoginStatus()
+    {
+        return $this->_loginStatus;
+    }
+    public function getMovies()
+    {
+        return $this->_movies;
+    }
+    public function getMovie()
+    {
+        return $this->_movie;
+    }
 }
-?>
