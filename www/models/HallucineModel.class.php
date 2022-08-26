@@ -4,6 +4,7 @@ require_once "Model.class.php";
 require_once "User.class.php";
 require_once "Movie.class.php";
 require_once "Genre.class.php";
+require_once "Casting.class.php";
 require_once "MovieUserRating.class.php";
 
 class HallucineModel extends Model{
@@ -115,6 +116,25 @@ class HallucineModel extends Model{
             $genres[] = $genre;
         }
         $movie->setGenres($genres);
+
+        $sql = "SELECT movies.title, castings.*, casting_types.name
+                FROM castings
+                    INNER JOIN movies_castings ON movies_castings.casting_id = castings.id  
+                    INNER JOIN movies ON movies_castings.movie_id = movies.id
+                    INNER JOIN casting_types ON castings.type = casting_types.id
+                WHERE movies.id = $movieId
+                ORDER BY casting_types.id, castings.lastname, castings.firstname;";
+
+        $rows = $this->_getRows(HOST, DB_NAME, LOGIN, PASSWORD, $sql);
+        $castings = array();
+        foreach ($rows as $key => $value) {
+            $casting = new Casting($value["id"], $value["firstname"], $value["lastname"], $value["sex"], $value["about"], $value["birthdate"], $value["type"]);
+            $castings[$value["type"]][] = $casting;
+            // [] = $casting;
+        }
+
+        $movie->setCastings($castings);
+        // var_dump($movie->getCastings()["3"]);
 
         $this->_movie = $movie;
     }

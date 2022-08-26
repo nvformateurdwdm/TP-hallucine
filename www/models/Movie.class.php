@@ -12,6 +12,7 @@ class Movie{
 
     private int $_rate = -1;
     private array $_genres = array();
+    private array $_castings = array();
 
     public function __construct($id, $title, $imageURL, $runtime, $description, $releaseDate, $addedDate){
         $this->_id = $id;
@@ -56,6 +57,12 @@ class Movie{
     }
 
     public function getGenres():array{return $this->_genres;}
+
+    public function setCastings(array $castings){
+        $this->_castings = $castings;
+    }
+
+    public function getCastings():array{return $this->_castings;}
     
 }
 

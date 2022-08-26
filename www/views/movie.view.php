@@ -24,6 +24,17 @@ foreach ($movie->getGenres() as $key => $value) {
     }
 }
 
+$sActors = "";
+$count = count($movie->getCastings()["3"]);
+foreach ($movie->getCastings()["3"] as $key => $value) {
+    $sActor = "<a href='index.php?page=casting&castingid=".$value->getId()."'>".$value->getFirstname(). " ". $value->getLastname() ."</a>";
+    // $sGenre = $value->getName();
+    $sActors .= $sActor;
+    if($key < $count - 1){
+        $sActors .= ", ";
+    }
+}
+
 ?>
 
 <section id="movie_section">
@@ -47,7 +58,7 @@ foreach ($movie->getGenres() as $key => $value) {
             </div>
             <h4>Genre : <?= $sGenres ?></h4>
             <h4>Durée : <?= $movie->getformatedRuntime(); ?></h4>
-            <h4>Acteurs : Kad Merad, Marina Foïs, Kad Merad, Marina Foïs, Kad Merad, Marina Foïs, Kad Merad, Marina Foïs</h4>
+            <h4>Acteurs : <?= $sActors ?></h4>
             <h4>Scénariste : Kad Merad, Marina Foïs</h4>
             <h4>Réalisateur : Kad Merad, Marina Foïs</h4>
             <h3>Résumé :<br> <?= $movie->getDescription(); ?> </h3>
