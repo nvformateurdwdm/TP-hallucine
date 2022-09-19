@@ -10,7 +10,7 @@ $idBodyCss = "login-registration";
 
 <?php
 $email = IS_DEBUG ? "nicolas.vedrine@gmail.com" : "";
-$password = IS_DEBUG ? "toto" : "";
+$password = IS_DEBUG ? "1234" : "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = "";
